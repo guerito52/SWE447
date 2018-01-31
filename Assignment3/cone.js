@@ -13,7 +13,7 @@ function init() {
 
     gl.clearColor( 0.25, 0.45, 0.75, 1.0 );
 	
-    cone = new Cone(100);
+    cone = new Cone(gl);
 
     render();
 }
