@@ -5,7 +5,7 @@
   <script src="../Common/Cone.js"></script>
   <script src="cone.js"></script>
   
-  <script id = "Cone-vertex-shader" type = "x-shader/x-vertex>
+  <script id = "Cone-vertex-shader" type = "x-shader/x-vertex">
     attribute vec4 vPosition;
  
     void main() 
@@ -14,7 +14,7 @@
     }
   </script>
    
-  <script id = "Cone-fragment-shader" type = "x-shader/x-fragment>
+  <script id = "Cone-fragment-shader" type = "x-shader/x-fragment">
     precision highp float;
     void main() 
     {
