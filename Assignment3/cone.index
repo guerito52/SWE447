@@ -19,6 +19,7 @@
 		precision highp float;
 		void main()
 		{
+			gl_PointSize = 5.0;
     			gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0);
 		}
 	</script>
@@ -27,8 +28,7 @@
 </head>
 
 <body>
-	<canvas id="webgl-canvas" width="512" height="512" style="background-color: #00FF00">
-	</canvas>
+	<canvas id="webgl-canvas" width="512" height="512" style="background-color: #00FF00"></canvas>
 </body>
 
 </html>
