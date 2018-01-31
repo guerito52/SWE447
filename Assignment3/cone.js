@@ -12,8 +12,8 @@ function init() {
     }
 
     gl.clearColor( 0.50, 0.75, 0.25, 1.0 );
-    
-    cone = new Cone(50);
+	
+    cone = new Cone( 50 );
 
     render();
 }
@@ -22,5 +22,7 @@ function render() {
     gl.clear( gl.COLOR_BUFFER_BIT );
     cone.render();
 }
+
+
 
 window.onload = init;
