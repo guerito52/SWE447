@@ -35,49 +35,52 @@ function Square(gl, vertexShaderId, fragmentShaderId) {
 		]),
 		numComponents : 3 
 	};
-    this.indices = {
-    values : new Uint16Array([ 0, 1, 3, 2 ])
-    };
+    	this.indices = {
+    		values : new Uint16Array([ 
+	    		0, 1, 2,
+	    		1, 3, 2 
+    		])
+	};
 	
 	// positions
 	
 	this.positions.buffer = gl.createBuffer();
 	gl.bindBuffer( gl.ARRAY_BUFFER, this.positions.buffer );
-    gl.bufferData( gl.ARRAY_BUFFER, this.positions.values, gl.STATIC_DRAW );
+    	gl.bufferData( gl.ARRAY_BUFFER, this.positions.values, gl.STATIC_DRAW );
 	this.positions.attributeLoc = gl.getAttribLocation( this.program, "vPosition" );
 	gl.enableVertexAttribArray( this.positions.attributeLoc );
 
 	// colors
-    this.colors.buffer = gl.createBuffer();
-    gl.bindBuffer( gl.ARRAY_BUFFER, this.colors.buffer );
-    gl.bufferData( gl.ARRAY_BUFFER, this.colors.values, gl.STATIC_DRAW );
-    this.colors.attributeLoc = gl.getAttribLocation( this.program, "vColor" );
-    gl.enableVertexAttribArray( this.colors.attributeLoc );
+    	this.colors.buffer = gl.createBuffer();
+    	gl.bindBuffer( gl.ARRAY_BUFFER, this.colors.buffer );
+    	gl.bufferData( gl.ARRAY_BUFFER, this.colors.values, gl.STATIC_DRAW );
+    	this.colors.attributeLoc = gl.getAttribLocation( this.program, "vColor" );
+    	gl.enableVertexAttribArray( this.colors.attributeLoc );
     
 	// indices
-    this.indices.buffer = gl.createBuffer();
-    gl.bindBuffer( gl.ELEMENT_ARRAY_BUFFER, this.indices.buffer );
-    gl.bufferData( gl.ELEMENT_ARRAY_BUFFER, this.indices.values, gl.STATIC_DRAW );
+    	this.indices.buffer = gl.createBuffer();
+    	gl.bindBuffer( gl.ELEMENT_ARRAY_BUFFER, this.indices.buffer );
+    	gl.bufferData( gl.ELEMENT_ARRAY_BUFFER, this.indices.values, gl.STATIC_DRAW );
     
 
 	this.render = function () {
-    	gl.useProgram( this.program );
-    	//gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+    		gl.useProgram( this.program );
+    		//gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
-    	gl.bindBuffer( gl.ARRAY_BUFFER, this.positions.buffer );
-    	gl.vertexAttribPointer( this.positions.attributeLoc, this.positions.numComponents,
+    		gl.bindBuffer( gl.ARRAY_BUFFER, this.positions.buffer );
+    		gl.vertexAttribPointer( this.positions.attributeLoc, this.positions.numComponents,
         		gl.FLOAT, gl.FALSE, 0, 0 );
 
            
-    	gl.bindBuffer( gl.ARRAY_BUFFER, this.colors.buffer );
-    	gl.vertexAttribPointer( this.colors.attributeLoc, this.colors.numComponents,
+    		gl.bindBuffer( gl.ARRAY_BUFFER, this.colors.buffer );
+    		gl.vertexAttribPointer( this.colors.attributeLoc, this.colors.numComponents,
         		gl.FLOAT, gl.FALSE, 0, 0 );
 	
-        //gl.bindBuffer( gl.ELEMENT_ARRAY_BUFFER, this.indices.buffer );
+        	//gl.bindBuffer( gl.ELEMENT_ARRAY_BUFFER, this.indices.buffer );
 		var start = 0;
 		var count = this.count;
 		//gl.drawArrays(gl.TRIANGLE_STRIP, start, count); // TRIANGLE_STRIP
-		gl.drawElements(gl.TRIANGLE_STRIP, this.indices.values.length, gl.UNSIGNED_SHORT, 0);
+		gl.drawElements(gl.TRIANGLE, this.indices.values.length, gl.UNSIGNED_SHORT, 0);
 
 
 	};
