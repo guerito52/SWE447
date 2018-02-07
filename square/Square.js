@@ -34,7 +34,7 @@ function Square(gl, vertexShaderId, fragmentShaderId) {
 		numComponents : 3 
 	};
     	this.indices = {
-    	values : new Uint16Array([ 0, 1, 3, 2 ])
+    	values : new Uint16Array([ 0, 2, 3, 0, 1, 2 ])
     	};
 	
 	// positions
