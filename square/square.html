@@ -1,20 +1,21 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 	<head>
-		<meta charset="utf-8"/>
   		<script src="../Common/webgl-utils.js"></script>
   		<script src="../Common/initShaders.js"></script>
-		<script src="../Common/MV.js"></script>
-  		<script src="Square.js"></script>
+  		<script src="..Square.js"></script>
   		<script src="square.js"></script>
   
 		<script id="Square-vertex-shader" type="x-shader/x-vertex">
 			attribute vec4 vPosition;
-			uniform mat4 MV;
+			attribute vec3 vColor;
+			varying vec3 fColor;
 			void main()
 			{
 				gl_PointSize = 5.0;
 				gl_Position = vPosition;
+    				fColor = vColor;
+	
 			}
 		</script>
 		<script id = "Square-fragment-shader" type="x-shader/x-fragment">
@@ -22,12 +23,10 @@
 			varying vec3 fColor;
 			void main()
 			{
-
-    				gl_FragColor = vec4(1.0, 0.0, gl_FrontFacing ? 1.0 : 0.0, 1.0);
+    				gl_FragColor = vec4(fColor, 1.0); //vec4(1.0, 0.0, 0.0, 1.0);
 			}
 		</script>
 	</head>
-	
 	<body>
 		<canvas id="webgl-canvas" width="512" height="512" style="background-color: #0000FF"></canvas>
 	</body>
