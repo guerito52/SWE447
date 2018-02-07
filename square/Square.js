@@ -50,45 +50,37 @@ function Square(gl, vertexShaderId, fragmentShaderId) {
 			6, 2, 4 
 		])
     	};
+	this.indices.count = this.indices.values.length;
 	
 	// positions
 	
 	this.positions.buffer = gl.createBuffer();
-	gl.bindBuffer( gl.ARRAY_BUFFER, this.positions.buffer );
+    	gl.bindBuffer( gl.ARRAY_BUFFER, this.positions.buffer );
     	gl.bufferData( gl.ARRAY_BUFFER, this.positions.values, gl.STATIC_DRAW );
-	this.positions.attributeLoc = gl.getAttribLocation( this.program, "vPosition" );
-	gl.enableVertexAttribArray( this.positions.attributeLoc );
 
-	// colors
-    	this.colors.buffer = gl.createBuffer();
-    	gl.bindBuffer( gl.ARRAY_BUFFER, this.colors.buffer );
-    	gl.bufferData( gl.ARRAY_BUFFER, this.colors.values, gl.STATIC_DRAW );
-    	this.colors.attributeLoc = gl.getAttribLocation( this.program, "vColor" );
-    	gl.enableVertexAttribArray( this.colors.attributeLoc );
-    
-	// indices
-   	this.indices.buffer = gl.createBuffer();
+    	this.indices.buffer = gl.createBuffer();
     	gl.bindBuffer( gl.ELEMENT_ARRAY_BUFFER, this.indices.buffer );
     	gl.bufferData( gl.ELEMENT_ARRAY_BUFFER, this.indices.values, gl.STATIC_DRAW );
-    
 
-	this.render = function () {
-    	gl.useProgram( this.program );
-    	//gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+    	this.positions.attributeLoc = gl.getAttribLocation( this.program, "vPosition" );
+    	gl.enableVertexAttribArray( this.positions.attributeLoc );
 
-    	gl.bindBuffer( gl.ARRAY_BUFFER, this.positions.buffer );
-    	gl.vertexAttribPointer( this.positions.attributeLoc, this.positions.numComponents, gl.FLOAT, gl.FALSE, 0, 0 );
+    	MVLoc = gl.getUniformLocation( this.program, "MV" );
 
-           
-    	gl.bindBuffer( gl.ARRAY_BUFFER, this.colors.buffer );
-    	gl.vertexAttribPointer( this.colors.attributeLoc, this.colors.numComponents, gl.FLOAT, gl.FALSE, 0, 0 );
-	
-        //gl.bindBuffer( gl.ELEMENT_ARRAY_BUFFER, this.indices.buffer );
-	var start = 0;
-	var count = this.count;
-	//gl.drawArrays(gl.TRIANGLE_STRIP, start, count); // TRIANGLE_STRIP
-	gl.drawElements(gl.TRIANGLE, this.indices.values.length, gl.UNSIGNED_SHORT, 0);
-	};
+    	this.MV = undefined;
 
+    	this.render = function () {
+        	gl.useProgram( this.program );
+
+        	gl.bindBuffer( gl.ARRAY_BUFFER, this.positions.buffer );
+        	gl.vertexAttribPointer( this.positions.attributeLoc, this.positions.numComponents, gl.FLOAT, gl.FALSE, 0, 0 );
+ 
+        	gl.bindBuffer( gl.ELEMENT_ARRAY_BUFFER, this.indices.buffer );
+
+        	gl.uniformMatrix4fv( MVLoc, gl.FALSE, flatten(this.MV) );
+
+        	// Draw the cube's base
+        	gl.drawElements( gl.TRIANGLES, this.indices.count, gl.UNSIGNED_SHORT, 0 );
+    	}
 };
 
