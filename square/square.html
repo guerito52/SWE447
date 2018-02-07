@@ -1,6 +1,7 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 	<head>
+		<meta charset="utf-8"/>
   		<script src="../Common/webgl-utils.js"></script>
   		<script src="../Common/initShaders.js"></script>
 		<script src="../Common/MV.js"></script>
@@ -25,7 +26,7 @@
 			void main()
 			{
 
-    				gl_FragColor = vec4(fColor, 1.0); //vec4(1.0, 0.0, 0.0, 1.0);
+    				gl_FragColor = vec4(1.0, 0.0, gl_FrontFacing ? 1.0 : 0.0, 1.0);
 			}
 		</script>
 	</head>
