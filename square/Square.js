@@ -12,17 +12,13 @@ function Square(gl, vertexShaderId, fragmentShaderId) {
 	this.positions = {
 		values : new Float32Array([
 		    	// Front face
-		    	-.5,.5,.5,
-            		-.5,.5,-.5,
-             		.5,.5,.5,
-             		.5,.5,-.5,
-             		.5,-.5,.5,
-             		.5,-.5,-.5,
-            		-.5,-.5,.5,
-            		-.5,-.5,-.5
+		    0.0, 0.0, // Vertex 0
+		    1.0, 0.0, // Vertex 1
+		    1.0, 1.0, // Vertex 2
+		    0.0, 1.0  // Vertex 3
 			
 		]),
-		numComponents : 3 // 3 components for each
+		numComponents : 2 // 3 components for each
 		// position (2D coords)
 	};
 	this.colors = {
