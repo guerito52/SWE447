@@ -15,28 +15,44 @@ function Square(gl, vertexShaderId, fragmentShaderId) {
 
 	this.positions = {
 		values : new Float32Array([
-		    // Front face
-		    0.0, 0.0, // Vertex 0
-		    1.0, 0.0, // Vertex 1
-		    1.0, 1.0, // Vertex 2
-		    0.0, 1.0  // Vertex 3
+		    	// Front face
+		    	0.0, 0.0, 0.0 // Vertex 0
+		    	1.0, 0.0, 0.0 // Vertex 1
+		    	1.0, 1.0, 0.0 // Vertex 2
+		    	0.0, 1.0, 0.0 // Vertex 3
+			0.0, 0.0  1.0 // Vertex 4
+			1.0, 0.0, 1.0 // Vertex 5
+			1.0, 1.0, 1.0 // Vertex 6
+			0.0, 1.0, 1.0 // Vertex 7
+			
 		]),
 		numComponents : 2 // 3 components for each
 		// position (2D coords)
 	};
 	this.colors = {
 		values : new Float32Array([
-		    1.0, 0.0, 0.0, 
-		    1.0, 0.0, 0.0,
-		    1.0, 0.0, 0.0,
-		    1.0, 0.0, 0.0
+		    	1.0, 0.0, 0.0, 
+		    	1.0, 0.0, 0.0,
+		    	1.0, 0.0, 0.0,
+		    	1.0, 0.0, 0.0
 		]),
 		numComponents : 3 
 	};
     	this.indices = {
-    	values : new Uint16Array([ 
-		0, 1, 2,
-		1, 3, 2, ])
+    		values : new Uint16Array([ 
+			0, 1, 2,
+			1, 3, 2, 
+			2, 3, 7,
+			2, 7, 6,
+			0, 2, 6,
+			4, 0, 6,
+			3, 1, 7,
+			7, 1, 5,
+			6, 7, 4,
+			4, 7, 5,
+			4, 5, 0,
+			5, 1, 0 
+		])
     	};
 	
 	// positions
