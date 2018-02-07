@@ -18,10 +18,10 @@ function Square(gl, vertexShaderId, fragmentShaderId) {
 	this.positions = {
 		values : new Float32Array([
 		    // Front face
-		    0.0, 0.0, // Vertex 0
-		    1.0, 0.0, // Vertex 1
-		    1.0, 1.0, // Vertex 2
-		    0.0, 1.0  // Vertex 3
+		    0.0, 0.0, 0.0, // Vertex 0
+		    1.0, 0.0, 0.0,// Vertex 1
+		    1.0, 1.0, 0.0,// Vertex 2
+		    0.0, 1.0, 0.0  // Vertex 3
 		]),
 		numComponents : 2 // 3 components for each
 		// position (2D coords)
@@ -37,8 +37,8 @@ function Square(gl, vertexShaderId, fragmentShaderId) {
 	};
     	this.indices = {
     		values : new Uint16Array([ 
-	    		0,1,2,
-			0,2,3
+	    		0, 1, 2,
+			0, 2, 3
     		])
 	};
 	
