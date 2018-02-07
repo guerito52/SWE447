@@ -9,21 +9,17 @@ function Square(gl, vertexShaderId, fragmentShaderId) {
 		return; 
 	}
 
-
-	gl.useProgram(this.program);
-	this.count = 4;
-
 	this.positions = {
 		values : new Float32Array([
 		    	// Front face
-		    	0.0, 0.0, 0.0 // Vertex 0
-		    	1.0, 0.0, 0.0 // Vertex 1
-		    	1.0, 1.0, 0.0 // Vertex 2
-		    	0.0, 1.0, 0.0 // Vertex 3
-			0.0, 0.0  1.0 // Vertex 4
-			1.0, 0.0, 1.0 // Vertex 5
-			1.0, 1.0, 1.0 // Vertex 6
-			0.0, 1.0, 1.0 // Vertex 7
+		    	-.5,.5,.5,
+            		-.5,.5,-.5,
+             		.5,.5,.5,
+             		.5,.5,-.5,
+             		.5,-.5,.5,
+             		.5,-.5,-.5,
+            		-.5,-.5,.5,
+            		-.5,-.5,-.5
 			
 		]),
 		numComponents : 3 // 3 components for each
@@ -41,17 +37,17 @@ function Square(gl, vertexShaderId, fragmentShaderId) {
     	this.indices = {
     		values : new Uint16Array([ 
 			0, 1, 2,
-			1, 3, 2, 
-			2, 3, 7,
-			2, 7, 6,
-			0, 2, 6,
-			4, 0, 6,
+			2, 1, 3,
+			2, 3, 4,
+			4, 3, 5,
+			4, 5, 6,
+			5, 7, 6,
+			7, 0, 6,
+			7, 1, 0,
 			3, 1, 7,
-			7, 1, 5,
-			6, 7, 4,
-			4, 7, 5,
-			4, 5, 0,
-			5, 1, 0 
+			5, 3, 7,
+			6, 0, 2,
+			6, 2, 4 
 		])
     	};
 	
