@@ -26,7 +26,7 @@ function Square(gl, vertexShaderId, fragmentShaderId) {
 			0.0, 1.0, 1.0 // Vertex 7
 			
 		]),
-		numComponents : 2 // 3 components for each
+		numComponents : 3 // 3 components for each
 		// position (2D coords)
 	};
 	this.colors = {
