@@ -23,7 +23,7 @@ function Square(gl, vertexShaderId, fragmentShaderId) {
 		    1.0, 1.0, 0.0,// Vertex 2
 		    0.0, 1.0, 0.0  // Vertex 3
 		]),
-		numComponents : 2 // 3 components for each
+		numComponents : 3 // 3 components for each
 		// position (2D coords)
 	};
 	this.colors = {
@@ -80,7 +80,7 @@ function Square(gl, vertexShaderId, fragmentShaderId) {
 		var start = 0;
 		var count = this.count;
 		//gl.drawArrays(gl.TRIANGLE_STRIP, start, count); // TRIANGLE_STRIP
-		gl.drawElements(gl.TRIANGLE, this.indices.values.length, gl.UNSIGNED_SHORT, 0);
+		gl.drawElements(gl.TRIANGLES, this.indices.values.length, gl.UNSIGNED_SHORT, 0);
 
 
 	};
