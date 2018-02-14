@@ -17,6 +17,14 @@ function init() {
   gl.enable( gl.DEPTH_TEST );
 
   cube = new Cube();
+  
+  document.getElementById("xButton").onclick = function(){
+	  console.log("Get the HELL out now!");
+  }
+  document.getElementById("slider").onchange = function(){
+	  console.log("That's not nice");
+	  //speed = 100 - event.srcElement.value;
+  }
 
   render();
 }
