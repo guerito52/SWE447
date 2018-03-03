@@ -8,7 +8,7 @@ var far = 10.0;     // far clipping plane's distance
 // Viewing transformation parameters
 var V = undefined;
 var M = undefined;
-var angle = 0.0;
+var angle = 1.0;
 var dAngle = 0.0; //Math.PI / 10.0;
 var S = undefined;
 var mouseDown = false;

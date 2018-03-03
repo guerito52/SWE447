@@ -1,17 +1,14 @@
-//
-//  Sphere.js
-//
-
 "use strict";
 
 function Sphere( slices, stacks, vertexShader, fragmentShader ) { 
     var i, j; 
+
     var program = initShaders(gl,
         vertexShader || "Sphere-vertex-shader",
         fragmentShader || "Sphere-fragment-shader");
 
     var nSlices = slices || 20; 
-    var nStacks = stacks || 12;
+    var nStacks = stacks || 12; 
 
     var dPhi = Math.PI / nStacks;
     var dTheta = 2.0 * Math.PI / nSlices;
@@ -49,9 +46,8 @@ function Sphere( slices, stacks, vertexShader, fragmentShader ) {
 
     var drawCalls = [];
 
-    
-    var start = indices.length; 
-    var offset = start * 2;
+    var start = indices.length;  
+    var offset = start * 2 ;
 
     var n = 1; 
     var m;  
@@ -70,7 +66,7 @@ function Sphere( slices, stacks, vertexShader, fragmentShader ) {
     });
 
     start = indices.length;
-    offset = start * 2 
+    offset = start * 2 ;
 
     for (j = 0; j < nStacks - 2; ++j) {
         for (i = 0; i < nSlices; ++i) {
@@ -90,7 +86,7 @@ function Sphere( slices, stacks, vertexShader, fragmentShader ) {
         });
 
         start = indices.length;
-        offset = start * 2 
+        offset = start * 2 ;
     }
 
     indices.push(n + nSlices);
@@ -174,7 +170,6 @@ function Sphere( slices, stacks, vertexShader, fragmentShader ) {
 		gl.bindTexture(gl.TEXTURE_2D, null);
 		textureHasLoaded = true;
 	}
-
 	diffuseTexture.image.src = "mars.jpg";
 
     this.PointMode = false;
@@ -222,6 +217,7 @@ function Sphere( slices, stacks, vertexShader, fragmentShader ) {
 			gl.bindTexture(gl.TEXTURE_2D, diffuseTexture);
 			gl.uniform1i(this.uniforms.Diffuse, 0);
 		}
+
         for (i = 0; i < drawCalls.length; ++i ) {
             var p = drawCalls[i];
             gl.drawElements(this.PointMode ? gl.POINTS : p.type,
