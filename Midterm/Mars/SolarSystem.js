@@ -30,7 +30,7 @@ var SolarSystem = {
     color : [ 0.5, 0.5, 0.5, 1.0 ]
   },
   Mars : {
-    radius : 0.532,
+    radius : 20,
     distance : 1.52,
     year : 1.88,
     color : [ 1.0, 0.0, 0.0, 1.0 ]
