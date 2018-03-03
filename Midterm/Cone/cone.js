@@ -1,145 +1,118 @@
-var gl = null;
-var cone = null;
-var canvas = undefined;
-var near = 1.0;     // near clipping plane's distance
-var far = 10.0;     // far clipping plane's distance
+const DefaultNumSides = 8;
 
-// Viewing transformation parameters
-var V = undefined;
-var M = undefined;
-var angle = 0.0;
-var dAngle = 0.0; //Math.PI / 10.0;
-var S = undefined;
-var mouseDown = false;
-var lastMouseX = null;
-var lastMouseY = null;
-var zvalue = -0.5*(near + far);
-var offset = [ 0.0,  0.0, 0.0 ];
-var rotationAxis = undefined;
-var xAxis = [1, 0, 0];
-var yAxis = [0, 1, 0];
-var speed = 1;
-var stoprotating = 0;
-
-function init() {
-    var canvas = document.getElementById( "webgl-canvas" );
-
-    gl = WebGLUtils.setupWebGL( canvas );
-
-    if ( !gl ) {
-        alert("Unable to setup WebGL");
+function Cone( gl, numSides, vertexShaderId, fragmentShaderId ) {
+    
+    var vertShdr = vertexShaderId || "Cone-vertex-shader";
+    var fragShdr = fragmentShaderId || "Cone-fragment-shader";
+    
+    this.program = initShaders(gl, vertShdr, fragShdr);
+    
+    if ( this.program < 0 ) {
+        alert( "Error: Cone shader pipeline failed to compile.\n\n" +
+              "\tvertex shader id:  \t" + vertShdr + "\n" +
+              "\tfragment shader id:\t" + fragShdr + "\n" );
         return;
     }
-	 document.getElementById("cBox").onclick = function() { 
-        if(document.getElementById("cBox").checked == true) {
-            dAngle = 0.0;
-            stoprotating = 1;
-        }
-        else {
-            dAngle = 2.0;
-            stoprotating = 0;
-        }      
-    }
-	document.getElementById("xButton").onclick = function() {
-        rotationAxis = xAxis;
-
-    }
     
-    document.getElementById("yButton").onclick = function() {
-        rotationAxis = yAxis;
-
-    }    
+    var n = numSides || DefaultNumSides;
     
-    document.getElementById("slider").onchange = function(event) {
-        speed = event.target.value / 10; //100 - event.srcElement.value;
+    var theta = 0.0;
+    var dTheta = 2.0 * Math.PI / n;
+    
+    this.positions = { numComponents : 3 };
+    this.colors = {numComponents : 3 };
+
+    //Color
+    var positions = [ 0.0, 0.0, 0.0 ];
+    var colors = [1.0, 0.0, 0.0];
+    var indices = [ 0 ];
+    
+    for ( var i = 0; i < n; ++i ) {
+        theta = i * dTheta;
+        positions.push( Math.cos(theta), Math.sin(theta), 4.0 );
+        colors.push(1.0, 0.0, 0.0);
+        
+        indices.push(n - i);
+    }
+    // Size of CONE/ Stretch/Color
+    positions.push( 0.0, 0.0, 0.0 );
+    colors.push(1.0, 0.0, 0.0);
+    
+    
+    indices.push(n);
+    
+    this.indices = { count : indices.length };
+    
+  
+    indices.push(n + 1);
+    
+
+    indices = indices.concat( indices.slice(1,n+2).reverse() );
+
+    
+    this.positions.buffer = gl.createBuffer();
+    gl.bindBuffer( gl.ARRAY_BUFFER, this.positions.buffer );
+    gl.bufferData( gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW );
+    
+    this.colors.buffer = gl.createBuffer();
+    gl.bindBuffer( gl.ARRAY_BUFFER, this.colors.buffer );
+    gl.bufferData( gl.ARRAY_BUFFER, new Float32Array(colors), gl.STATIC_DRAW );
+    
+    this.indices.buffer = gl.createBuffer();
+    gl.bindBuffer( gl.ELEMENT_ARRAY_BUFFER, this.indices.buffer );
+    gl.bufferData( gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(indices), gl.STATIC_DRAW );
+    
+    this.positions.attributeLoc = gl.getAttribLocation( this.program, "vPosition" );
+    gl.enableVertexAttribArray( this.positions.attributeLoc );
+    
+    this.colors.attributeLoc = gl.getAttribLocation( this.program, "vColor" );
+    gl.enableVertexAttribArray( this.colors.attributeLoc );
+    
+    this.uniforms = {
+        MV : undefined,
+        P : undefined
     };
     
-    canvas.onmousedown = function handleMouseDown(event) {
-        mouseDown = true;
-        lastMouseX = event.clientX;
-        lastMouseY = event.clientY;
-    }
-
-    document.onmouseup = function handleMouseUp(event) {
-        mouseDown = false;
-        if (stoprotating) dAngle = 0.0;
-        return;
-
-    }
-
-    document.onmousemove = function handleMouseMove(event) {
-    if (!mouseDown) {
-      if(stoprotating) dAngle = 0.0;
-      return;
-    }
-	
-	var newX = event.clientX;
-    var newY = event.clientY;
-
-    var deltaX = newX - lastMouseX;
-    var deltaY = newY - lastMouseY;
-    dAngle = degToRad(deltaX + deltaY) * Math.PI * 5;
-    lastMouseX = newX;
-    lastMouseY = newY;
-    }   
-
-
-    document.onkeydown = function handleKeyDown(event) {
-        mkey = event.which || event.keyCode;
-        switch( mkey ) { // String.fromCharCode(mkey)
-            case 33 : zvalue -= 0.05; break; // Page Up
-            case 34 : zvalue += 0.05; break; // Page Down
-            case 37 : offset = [ -3.0,  0.0, 0.0 ]; break; // Left cursor key
-            case 39 : offset = [  3.0,  0.0, 0.0 ]; break; // right cursor key
-            case 38 : offset = [ 0.0,  3.0, 0.0 ]; break; // Up cursor key
-            case 40 : offset = [ 0.0,  -3.0, 0.0 ]; break; // Down cursor key
-            case 27 : offset = [ 0.0,  0.0, 0.0 ]; dAngle = 0; break; // Esc key
-            default : /*alert("You pressed the key code = " + mkey);*/ break;
-        }
+    this.uniforms.MV = gl.getUniformLocation(this.program, "MV");
+    this.uniforms.P = gl.getUniformLocation(this.program, "P");
     
+    this.MV = mat4();
+    this.P = mat4();
+    
+    this.render = function () {
+        gl.useProgram( this.program );
+        
+        gl.bindBuffer( gl.ARRAY_BUFFER, this.positions.buffer );
+        gl.vertexAttribPointer(
+                               this.positions.attributeLoc,
+                               this.positions.numComponents,
+                               gl.FLOAT,
+                               gl.FALSE,
+                               3 * Float32Array.BYTES_PER_ELEMENT,
+                               0
+                               );
+        
+        gl.bindBuffer( gl.ARRAY_BUFFER, this.colors.buffer );
+        gl.vertexAttribPointer(
+                               this.colors.attributeLoc,
+                               this.colors.numComponents,
+                               gl.FLOAT,
+                               gl.FALSE,
+                               3 * Float32Array.BYTES_PER_ELEMENT,
+                               0
+                               );
+        
+        gl.bindBuffer( gl.ELEMENT_ARRAY_BUFFER, this.indices.buffer );
+        
+        gl.uniformMatrix4fv( this.uniforms.MV, gl.FALSE, flatten(this.MV) );
+        gl.uniformMatrix4fv( this.uniforms.P, gl.FALSE, flatten(this.P) );
+        
+        
+       
+        gl.drawElements( gl.TRIANGLE_FAN, this.indices.count, gl.UNSIGNED_SHORT, 0 );
+        
+       
+        var offset = this.indices.count * 2 ;
+        gl.drawElements( gl.TRIANGLE_FAN, this.indices.count, gl.UNSIGNED_SHORT, offset );
     }
-
-    gl.clearColor( 0.25, 0.45, 0.75, 1.0 );
-	gl.enable(gl.DEPTH_TEST);
-	
-    cone = new Cone(gl);
-	resize();
-
-    render();
-	window.requestAnimationFrame(render);
-}
-
-function render() {
-    gl.clear( gl.COLOR_BUFFER_BIT );
-	V = translate(0.0, 0.0, zvalue);
-    angle += dAngle ;
-   
-    var axis = undefined; //[ 1.0, 1.0, 1.0 ];
-    if (rotationAxis != undefined) axis = rotationAxis;
-    else axis = [ 1.0, 1.0, 1.0 ];
-  
-    ms = new MatrixStack();
-    ms.push();
-    ms.load(V);
-    ms.translate(offset);
-    ms.rotate((speed * angle), axis);
-    ms.scale(1.0, 1.0, 1.0);
-    cone.MV = ms.current();
-    ms.pop();
-    cone.render();
-	window.requestAnimationFrame(render);
-}
-function resize() {
-    var width = canvas.clientWidth,
-    height = canvas.clientHeight;
-    gl.viewport(0, 0, width, height);
-    var fovy = 120.0; // degrees
-    aspect = width/height;
-    cone.P = perspective(fovy, aspect, near, far);
-}
-
-function degToRad(degrees) {
-    return degrees * Math.PI / 180;
-}
-window.onload = init;
-window.onresize = resize;
+};
