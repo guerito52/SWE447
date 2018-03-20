@@ -1,16 +1,19 @@
-Final Project proposal
+1.OVERVIEW
 
-overview: My project is to draw in particals and have them move with sound from mic or music. witch ever I get to do. the user will be able
-to change the color of the particals, and the intencity of the vibrations.
+I will be working with Carlos Trujillo on a game that will allow players to rob and escape while being pursued by law enforcement. Mechanics will include shooting and driving.
 
-Week 1: Resurch a bit of audio
+2.SCHEDULE
 
-Week 2: get particals to spawn in
+wk1: Collect info on creating mechanics.
 
-Week 3: get particals to move
+wk2: Get some code done for testing.
 
-Week 4: have particals viprating with mic
+wk3: Have movement done.
 
-Week 5: have particals viprating with music
+wk4: Make BASIC AI.
 
-I will create a web-based application using THREE.js.
+wk5: [Stretch goal] Make music.
+
+3.IMPLEMENTATION
+
+We will create a web-based application using phaser.js.
