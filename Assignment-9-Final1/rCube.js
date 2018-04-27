@@ -228,11 +228,30 @@ function Cube(gl, vertexShaderId, fragmentShaderId) {
 
   	this.MV = mat4(); // or undefined
   	this.P = mat4();
-  	var edgeDetectKernel = [
-     -1, -1, -1,
-     -1,  8, -1,
-     -1, -1, -1
+  	//var edgeDetectKernel = [
+    // -1, -1, -1,
+    // -1,  8, -1,
+    // -1, -1, -1
+    //];
+	/*
+	var boxBlurKernel= [
+        0.111, 0.111, 0.111,
+        0.111, 0.111, 0.111,
+        0.111, 0.111, 0.111
     ];
+	
+	var gaussianBlurKernel= [
+      0.045, 0.122, 0.045,
+      0.122, 0.332, 0.122,
+      0.045, 0.122, 0.045
+    ];
+	*/
+	var sharpenKernel = [
+		0, -1, 0,
+		-1, 5, -1,
+		0, -1, 0
+	];
+	
 
 	this.render = function () {
         	gl.useProgram( this.program );
@@ -252,8 +271,17 @@ function Cube(gl, vertexShaderId, fragmentShaderId) {
             gl.bindTexture(gl.TEXTURE_2D, texture);
 		    gl.uniform1i(this.uniforms.uSampler, 0);
             gl.uniform2f(this.uniforms.TextureSize, texImage.width, texImage.height);
-            gl.uniform1fv(this.uniforms.kernelLocation, edgeDetectKernel);
-            gl.uniform1f(this.uniforms.kernelWeightLocation, computeKernelWeight(edgeDetectKernel));
+            //gl.uniform1fv(this.uniforms.kernelLocation, edgeDetectKernel);
+            //gl.uniform1f(this.uniforms.kernelWeightLocation, computeKernelWeight(edgeDetectKernel));
+			
+			//gl.uniform1fv(this.uniforms.kernelLocation, boxBlurKernel);
+            //gl.uniform1f(this.uniforms.kernelWeightLocation, computeKernelWeight(boxBlurKernel));
+			
+			//gl.uniform1fv(this.uniforms.kernelLocation, gaussianBlurKernel);
+            //gl.uniform1f(this.uniforms.kernelWeightLocation, computeKernelWeight(gaussianBlurKernel));
+			
+			gl.uniform1fv(this.uniforms.kernelLocation, sharpenKernel);
+            gl.uniform1f(this.uniforms.kernelWeightLocation, computeKernelWeight(sharpenKernel));
 
             gl.drawElements(gl.TRIANGLES, this.indices.values.length, gl.UNSIGNED_SHORT, 0);
     }

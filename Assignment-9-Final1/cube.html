@@ -56,7 +56,7 @@ void main()
     gl_FragColor = vec4(minValue, 1.0);*/
     
     
-    // compute 1 pixel in texture coordinates.
+    // now compute 1 pixel in texture coordinates.
     vec2 onePixel = vec2(1.0, 1.0) / uTextureSize;
     // average the left, middle, and right pixels.
     /*gl_FragColor = (texture2D(uSampler, vTextureCoord) +
@@ -86,5 +86,10 @@ void main()
 </head>
 <body>
 <canvas id="webgl-canvas" width="512" height="512" style="background-color: #0000FF"></canvas>
+<div>
+<button id="blurBox">Blur-Box</button>
+<button id="blurGaussin">Blur-Gaussin</button>
+<button id="sharpen">Sharpen</button>
+</div>
 </body>
 </html>
