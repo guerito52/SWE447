@@ -1,10 +1,16 @@
- Volume in drive C is BOOTCAMP
- Volume Serial Number is B84D-EB6E
+var game = new Phaser.Game(1920, 1080, Phaser.Auto)
 
- Directory of C:\Users\Edgar Hernandez\Documents\SWE447\FinalProject\assets-js
+var GameState = {
+	preload: function(){
 
-04/26/2018  10:50 PM    <DIR>          .
-04/26/2018  10:50 PM    <DIR>          ..
-04/26/2018  10:50 PM                 0 main.js
-               1 File(s)              0 bytes
-               2 Dir(s)  170,207,764,480 bytes free
+	},
+	create: function(){
+		
+	},
+	update: function(){
+		
+	}
+}
+
+game.state.add('GameState', GameState)
+gane.state.start('GameState')
