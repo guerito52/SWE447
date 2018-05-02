@@ -2,7 +2,7 @@
 <html lang="en"> 
 <head> 
     <meta charset="UTF-8" />
-    <title>FinalProject</title>
+    <title>Day Pay</title>
     <script src="src/phaser.js"></script>
     <style type="text/css">
         body {
@@ -10,14 +10,16 @@
         }
     </style>
 </head>
+
+
 <body>
 
 <script type="text/javascript">
 
     var config = {
         type: Phaser.AUTO,
-        width: 800,
-        height: 600,
+        width: 1920,
+        height: 1080,
         physics: {
             default: 'arcade',
             arcade: {
@@ -31,89 +33,171 @@
             update: update
         }
     };
-
     var player;
     var moneyBag;
     var cursors;
+    var gotMoney;
+    var driving;
+    var hacker;
 
     var game = new Phaser.Game(config);
-
     function preload ()
     {
         this.load.image('ground', 'assets/ground.png');
         this.load.image('money', 'assets/money.png');
-        this.load.image('bomb', 'assets/bomb.png');
+        this.load.image('cop', 'assets/copCar.png');
         this.load.image('dude', 'assets/dude.png');
+        this.load.image('playerCar', 'assets/playerCar.png');
+        this.load.spritesheet('hackerSpriteSheet', 'assets/hackerSpriteSheet.png', {frameWidth: 512, frameHeight: 512});
+        
     }
-
     function create ()
     {
-        this.add.image(400, 300, 'ground');
+        this.add.image(960, 540, 'ground');
        
         
-        player = this.physics.add.sprite(100, 450, 'dude');
+        player = this.physics.add.sprite(800, 800, 'dude');
         
-        moneyBag = this.physics.add.sprite(300, 250, 'money');
-       
+        moneyBag = this.physics.add.sprite(900, 500, 'money');
+        cops = this.physics.add.sprite(1000, 0, 'cop');
         player.setCollideWorldBounds(true);
-
         cursors = this.input.keyboard.createCursorKeys();
-
-        
         
         this.physics.add.overlap(player, moneyBag, collectMoney, null, this);
 
+        this.anims.create({
+            key: 'One',
+            frames: this.anims.generateFrameNumbers('hackerSpriteSheet', { start: 0, end: 3 }),
+            frameRate: 10,
+            repeat: -1
+        });
        
     }
-
     function update ()
     {
+        if (driving)
+        {
+            playerCar = this.physics.add.sprite(player.x, player.y, 'playerCar');
+            this.physics.add.overlap(playerCar, cops, restartGame, null, this);
+            driving = false;
+        }
+       
+        if (gotMoney)
+        {
+            player.disableBody(true, true);
+            this.physics.moveTo(cops, playerCar.x, playerCar.y, 100);
+            cops.rotation = Math.atan2(playerCar.y - cops.y, playerCar.x - cops.x);
+            playerCar.rotation = 0;
+            hacker.anims.play('One', true);
+        }
+       
          if (cursors.left.isDown)
         {
-
-            player.setVelocityX(-160);
-
+           
+            if(gotMoney)
+            {
+                
+                playerCar.setVelocityX(-200);
+                playerCar.flipX = true;
+                playerCar.rotation = 0;
+            }
+            if(!gotMoney)
+            {
+                player.setVelocityX(-160);
+            }
+            
+            
+            
         }
         else if (cursors.right.isDown)
         {
-
-            player.setVelocityX(160);
- 
+            
+            if(gotMoney)
+            {
+                 playerCar.setVelocityX(200);
+                 playerCar.flipX = false;
+                 playerCar.rotation = 0;
+            }
+            if(!gotMoney)
+            {
+                player.setVelocityX(160);
+            }
         }
-
         else
         {
-            player.setVelocityX(0);
-
+            
+           if(gotMoney)
+            {
+                playerCar.setVelocityX(0);
+            }
+            if(!gotMoney)
+            {
+                player.setVelocityX(0);
+            }
         }
-
         if (cursors.up.isDown)
         {
-
-            player.setVelocityY(-160);
-
+           
+            if(gotMoney)
+            {
+                playerCar.setVelocityY(-200);
+                playerCar.rotation = -1.55;
+                playerCar.flipX = false;
+            }
+            if(!gotMoney)
+            {
+                player.setVelocityY(-160);
+            }
         }
         else if (cursors.down.isDown)
         {
-
-            player.setVelocityY(160);
-
+            
+             if(gotMoney)
+            {
+                playerCar.setVelocityY(200);
+                playerCar.rotation = 1.6;
+                playerCar.flipX = false;
+            }
+            if(!gotMoney)
+            {
+                player.setVelocityY(160);
+            }
         }
         else
         {
-            player.setVelocityY(0);
-
+            
+            if(gotMoney)
+            {
+                playerCar.setVelocityY(0);
+            }
+            if(!gotMoney)
+            {
+                player.setVelocityY(0);
+            }
         }
-
         
     }
-
     function collectMoney (player, money)
     {
        money.disableBody(true, true);
+       hacker = this.physics.add.sprite(200, 200, 'hackerSpriteSheet');
+       gotMoney = true;
+       driving = true;
     }
+    function restartGame()
+    {
+       this.scene.manager.bootScene(this);
+       gotMoney = false;
+       driving = false;
+       playerCar.disableBody(true, true);
+       player.disableBody(true, true);
+       cops.disableBody(true, true);
 
+    }
+    
+    
 </script>
 
 </body>
+
 </html>
